@@ -133,48 +133,48 @@ foreign opencl {
 
     // Event Object APIs
     WaitForEvents      :: proc(num_events: u32, event_list: [^]event) -> i32 ---
-    GetEventInfo       :: proc(event_: event, param_name: u32, param_value_size: uint, param_value: rawptr, param_value_size_ret: ^uint) -> i32 ---
+    GetEventInfo       :: proc(event: event, param_name: u32, param_value_size: uint, param_value: rawptr, param_value_size_ret: ^uint) -> i32 ---
     CreateUserEvent    :: proc(ctx: ctx, errcode_ret: ^i32) -> event ---
-    RetainEvent        :: proc(event_: event) -> i32 ---
-    ReleaseEvent       :: proc(event_: event) -> i32 ---
-    SetUserEventStatus :: proc(event_: event, execution_status: i32) -> i32 ---
-    SetEventCallback   :: proc(event_: event, command_exec_callback_type: i32, pfn_notify: proc(event_: event, event_command_status: i32, user_data: rawptr), user_data: rawptr) -> i32 ---
+    RetainEvent        :: proc(event: event) -> i32 ---
+    ReleaseEvent       :: proc(event: event) -> i32 ---
+    SetUserEventStatus :: proc(event: event, execution_status: i32) -> i32 ---
+    SetEventCallback   :: proc(event: event, command_exec_callback_type: i32, pfn_notify: proc(event: event, event_command_status: i32, user_data: rawptr), user_data: rawptr) -> i32 ---
 
     // Profiling APIs 
-    GetEventProfilingInfo :: proc(event_: event, param_name: u32, param_value_size: uint, param_value: rawptr, param_value_size_ret: ^uint) -> i32 ---
+    GetEventProfilingInfo :: proc(event: event, param_name: u32, param_value_size: uint, param_value: rawptr, param_value_size_ret: ^uint) -> i32 ---
 
     // Flush and Finish APIs 
     Flush  :: proc(command_queue: command_queue) -> i32 ---
     Finish :: proc(command_queue: command_queue) -> i32 ---
 
     // Enqueued Commands APIs
-    EnqueueReadBuffer          :: proc(command_queue: command_queue, buffer: mem, blocking_read: u32, offset: uint, size: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueReadBufferRect      :: proc(command_queue: command_queue, buffer: mem, blocking_read: u32, buffer_origin: [^]uint, host_origin: [^]uint, region: [^]uint, buffer_row_pitch: uint, buffer_slice_pitch: uint, host_row_pitch: uint, host_slice_pitch: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueWriteBuffer         :: proc(command_queue: command_queue, buffer: mem, blocking_write: u32, offset: uint, size: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueWriteBufferRect     :: proc(command_queue: command_queue, buffer: mem, blocking_write: u32, buffer_origin: [^]uint, host_origin: [^]uint, region: [^]uint, buffer_row_pitch: uint, buffer_slice_pitch: uint, host_row_pitch: uint, host_slice_pitch: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueFillBuffer          :: proc(command_queue: command_queue, buffer: mem, pattern: rawptr, pattern_size: uint, offset: uint, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueCopyBuffer          :: proc(command_queue: command_queue, src_buffer: mem, dst_buffer: mem, src_offset: uint, dst_offset: uint, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueCopyBufferRect      :: proc(command_queue: command_queue, src_buffer: mem, dst_buffer: mem, src_origin: [^]uint, dst_origin: [^]uint, region: [^]uint, src_row_pitch: uint, src_slice_pitch: uint, dst_row_pitch: uint, dst_slice_pitch: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueReadImage           :: proc(command_queue: command_queue, image: mem, blocking_read: u32, origin: [^]uint, region: [^]uint, row_pitch: uint, slice_pitch: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueWriteImage          :: proc(command_queue: command_queue, image: mem, blocking_write: u32, origin: [^]uint, region: [^]uint, input_row_pitch: uint, input_slice_pitch: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueFillImage           :: proc(command_queue: command_queue, image: mem, fill_color: rawptr, origin: [^]uint, region: [^]uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueCopyImage           :: proc(command_queue: command_queue, src_image: mem, dst_image: mem, src_origin: [^]uint, dst_origin: [^]uint, region: [^]uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueCopyImageToBuffer   :: proc(command_queue: command_queue, src_image: mem, dst_buffer: mem, src_origin: [^]uint, region: [^]uint, dst_offset: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueCopyBufferToImage   :: proc(command_queue: command_queue, src_buffer: mem, dst_image: mem, src_offset: uint, dst_origin: [^]uint, region: [^]uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueMapBuffer           :: proc(command_queue: command_queue, buffer: mem, blocking_map: u32, map_flags: u64, offset: uint, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event, errcode_ret: ^i32) -> rawptr ---
-    EnqueueMapImage            :: proc(command_queue: command_queue, image: mem, blocking_map: u32, map_flags: u64, origin: [^]uint, region: [^]uint, image_row_pitch: ^uint, image_slice_pitch: ^uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event, errcode_ret: ^i32) -> rawptr ---
-    EnqueueUnmapMemObject      :: proc(command_queue: command_queue, memobj: mem, mapped_ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueMigrateMemObjects   :: proc(command_queue: command_queue, num_mem_objects: u32, mem_objects: [^]mem, flags: u64, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueNDRangeKernel       :: proc(command_queue: command_queue, kernel: kernel, work_dim: u32, global_work_offset: [^]uint, global_work_size: [^]uint, local_work_size: [^]uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueNativeKernel        :: proc(command_queue: command_queue, user_func: proc(ptr: rawptr), args: rawptr, cb_args: uint, num_mem_objects: u32, mem_list: [^]mem, args_mem_loc: ^rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueMarkerWithWaitList  :: proc(command_queue: command_queue, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueBarrierWithWaitList :: proc(command_queue: command_queue, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueSVMFree             :: proc(command_queue: command_queue, num_svm_pointers: u32, svm_pointers: [^]rawptr, pfn_free_func: proc(queue: command_queue, num_svm_pointers: u32, svm_pointers: [^]rawptr, user_data: rawptr), user_data: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueSVMMemcpy           :: proc(command_queue: command_queue, blocking_copy: u32, dst_ptr: rawptr, src_ptr: rawptr, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueSVMMemFill          :: proc(command_queue: command_queue, svm_ptr: rawptr, pattern: rawptr, pattern_size: uint, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueSVMMap              :: proc(command_queue: command_queue, blocking_map: u32, flags: u64, svm_ptr: rawptr, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueSVMUnmap            :: proc(command_queue: command_queue, svm_ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
-    EnqueueSVMMigrateMem       :: proc(command_queue: command_queue, num_svm_pointers: u32, svm_pointers: [^]rawptr, sizes: [^]uint, flags: u64, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
+    EnqueueReadBuffer          :: proc(command_queue: command_queue, buffer: mem, blocking_read: u32, offset: uint, size: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueReadBufferRect      :: proc(command_queue: command_queue, buffer: mem, blocking_read: u32, buffer_origin: [^]uint, host_origin: [^]uint, region: [^]uint, buffer_row_pitch: uint, buffer_slice_pitch: uint, host_row_pitch: uint, host_slice_pitch: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueWriteBuffer         :: proc(command_queue: command_queue, buffer: mem, blocking_write: u32, offset: uint, size: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueWriteBufferRect     :: proc(command_queue: command_queue, buffer: mem, blocking_write: u32, buffer_origin: [^]uint, host_origin: [^]uint, region: [^]uint, buffer_row_pitch: uint, buffer_slice_pitch: uint, host_row_pitch: uint, host_slice_pitch: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueFillBuffer          :: proc(command_queue: command_queue, buffer: mem, pattern: rawptr, pattern_size: uint, offset: uint, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueCopyBuffer          :: proc(command_queue: command_queue, src_buffer: mem, dst_buffer: mem, src_offset: uint, dst_offset: uint, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueCopyBufferRect      :: proc(command_queue: command_queue, src_buffer: mem, dst_buffer: mem, src_origin: [^]uint, dst_origin: [^]uint, region: [^]uint, src_row_pitch: uint, src_slice_pitch: uint, dst_row_pitch: uint, dst_slice_pitch: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueReadImage           :: proc(command_queue: command_queue, image: mem, blocking_read: u32, origin: [^]uint, region: [^]uint, row_pitch: uint, slice_pitch: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueWriteImage          :: proc(command_queue: command_queue, image: mem, blocking_write: u32, origin: [^]uint, region: [^]uint, input_row_pitch: uint, input_slice_pitch: uint, ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueFillImage           :: proc(command_queue: command_queue, image: mem, fill_color: rawptr, origin: [^]uint, region: [^]uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueCopyImage           :: proc(command_queue: command_queue, src_image: mem, dst_image: mem, src_origin: [^]uint, dst_origin: [^]uint, region: [^]uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueCopyImageToBuffer   :: proc(command_queue: command_queue, src_image: mem, dst_buffer: mem, src_origin: [^]uint, region: [^]uint, dst_offset: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueCopyBufferToImage   :: proc(command_queue: command_queue, src_buffer: mem, dst_image: mem, src_offset: uint, dst_origin: [^]uint, region: [^]uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueMapBuffer           :: proc(command_queue: command_queue, buffer: mem, blocking_map: u32, map_flags: u64, offset: uint, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event, errcode_ret: ^i32) -> rawptr ---
+    EnqueueMapImage            :: proc(command_queue: command_queue, image: mem, blocking_map: u32, map_flags: u64, origin: [^]uint, region: [^]uint, image_row_pitch: ^uint, image_slice_pitch: ^uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event, errcode_ret: ^i32) -> rawptr ---
+    EnqueueUnmapMemObject      :: proc(command_queue: command_queue, memobj: mem, mapped_ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueMigrateMemObjects   :: proc(command_queue: command_queue, num_mem_objects: u32, mem_objects: [^]mem, flags: u64, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueNDRangeKernel       :: proc(command_queue: command_queue, kernel: kernel, work_dim: u32, global_work_offset: [^]uint, global_work_size: [^]uint, local_work_size: [^]uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueNativeKernel        :: proc(command_queue: command_queue, user_func: proc(ptr: rawptr), args: rawptr, cb_args: uint, num_mem_objects: u32, mem_list: [^]mem, args_mem_loc: ^rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueMarkerWithWaitList  :: proc(command_queue: command_queue, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueBarrierWithWaitList :: proc(command_queue: command_queue, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueSVMFree             :: proc(command_queue: command_queue, num_svm_pointers: u32, svm_pointers: [^]rawptr, pfn_free_func: proc(queue: command_queue, num_svm_pointers: u32, svm_pointers: [^]rawptr, user_data: rawptr), user_data: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueSVMMemcpy           :: proc(command_queue: command_queue, blocking_copy: u32, dst_ptr: rawptr, src_ptr: rawptr, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueSVMMemFill          :: proc(command_queue: command_queue, svm_ptr: rawptr, pattern: rawptr, pattern_size: uint, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueSVMMap              :: proc(command_queue: command_queue, blocking_map: u32, flags: u64, svm_ptr: rawptr, size: uint, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueSVMUnmap            :: proc(command_queue: command_queue, svm_ptr: rawptr, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
+    EnqueueSVMMigrateMem       :: proc(command_queue: command_queue, num_svm_pointers: u32, svm_pointers: [^]rawptr, sizes: [^]uint, flags: u64, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
 
     // Extension function access
     GetExtensionFunctionAddressForPlatform :: proc(platform: platform_id, func_name: cstring ) -> rawptr ---
@@ -194,7 +194,7 @@ foreign opencl {
     // Deprecated OpenCL 2.0 APIs 
     CreateCommandQueue :: proc(ctx: ctx, device: device_id, properties: u64, errcode_ret: ^i32) -> command_queue ---
     CreateSampler      :: proc(ctx: ctx, normalized_coords: u32, addressing_mode: u32, filter_mode: u32, errcode_ret: ^i32) -> sampler ---
-    EnqueueTask        :: proc(command_queue: command_queue, kernel: kernel, num_events_in_wait_list: u32, event_wait_list: [^]event, event_: ^event) -> i32 ---
+    EnqueueTask        :: proc(command_queue: command_queue, kernel: kernel, num_events_in_wait_list: u32, event_wait_list: [^]event, event: ^event) -> i32 ---
 }
 
 // Error Codes
