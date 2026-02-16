@@ -26,12 +26,9 @@ show_status :: proc(msg: string, status: i32) {
 }
 
 main :: proc() {
-    n_samples        := uint(50)
-    local_work_size  := uint(256)
-    global_work_size := (n_samples + local_work_size - 1) / local_work_size * local_work_size
-
-    buf_src := make([]f32, global_work_size);
-    buf_dst := make([]f32, global_work_size);
+    n_samples := uint(50)
+    buf_src := make([]f32, n_samples);
+    buf_dst := make([]f32, n_samples);
     defer delete(buf_src)
     defer delete(buf_dst)
     for i in 0..<n_samples {
@@ -56,9 +53,9 @@ main :: proc() {
     show_status("Create command queue", status)
     defer cl.ReleaseCommandQueue(command_queue)
 
-    cl_buf_src := cl.CreateBuffer(ctx, cl.MEM_READ_ONLY, size_of(f32) * global_work_size, nil, &status)
+    cl_buf_src := cl.CreateBuffer(ctx, cl.MEM_READ_ONLY, size_of(f32) * n_samples, nil, &status)
     show_status("Create buffer src", status)
-    cl_buf_dst := cl.CreateBuffer(ctx, cl.MEM_WRITE_ONLY, size_of(f32) * global_work_size, nil, &status)
+    cl_buf_dst := cl.CreateBuffer(ctx, cl.MEM_WRITE_ONLY, size_of(f32) * n_samples, nil, &status)
     show_status("Create buffer dst", status)
     defer cl.ReleaseMemObject(cl_buf_src)
     defer cl.ReleaseMemObject(cl_buf_dst)
@@ -79,13 +76,19 @@ main :: proc() {
     status |= cl.SetKernelArg(kernel, 2, size_of(i32),    cast(rawptr)&n_samples)
     show_status("Set args", status)
 
-    status = cl.EnqueueWriteBuffer(command_queue, cl_buf_src, cl.FALSE, 0, size_of(f32) * global_work_size, raw_data(buf_src), 0, nil, nil)
+    local_work_size: uint
+    status = cl.GetKernelWorkGroupInfo(kernel, device, cl.KERNEL_WORK_GROUP_SIZE, size_of(local_work_size), &local_work_size, nil)
+    show_status("Get local work size", status)
+    fmt.printfln("LOCAL WORK SIZE: %d", local_work_size)
+    global_work_size := (n_samples + local_work_size - 1) / local_work_size * local_work_size
+
+    status = cl.EnqueueWriteBuffer(command_queue, cl_buf_src, cl.FALSE, 0, size_of(f32) * n_samples, raw_data(buf_src), 0, nil, nil)
     show_status("Enqueue write buf", status)
 
     status = cl.EnqueueNDRangeKernel(command_queue, kernel, 1, nil, &global_work_size, &local_work_size, 0, nil, nil)
     show_status("Enqueue kernel", status)
 
-    status = cl.EnqueueReadBuffer(command_queue, cl_buf_dst, cl.TRUE, 0, size_of(f32) * global_work_size, raw_data(buf_dst), 0, nil, nil)
+    status = cl.EnqueueReadBuffer(command_queue, cl_buf_dst, cl.TRUE, 0, size_of(f32) * n_samples, raw_data(buf_dst), 0, nil, nil)
     show_status("Enqueue read buf", status)
 
     for i in 0..<n_samples {
